@@ -1,0 +1,78 @@
+pre-requesits:
+    EC2 Virtual machine
+    AWS account
+    AWS Cli installed
+    kubctl installed
+    eksclt installed
+    docker installed
+ -----------------------------------------------------------------------------------------  
+
+Update the VM
+    sudo apt update && sudo apt upgrade -y
+
+Install AWS CLI
+    
+    sudo apt install unzip curl -y
+    
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    
+    unzip awscliv2.zip
+    
+    sudo ./aws/install
+    
+    aws --version
+
+Configure AWS Credentials
+    
+    aws configure
+
+    Enter
+
+    AWS Access Key ID
+    AWS Secret Access Key
+    Default region 
+    Default output format: json
+
+Verify:
+
+    aws sts get-caller-identity
+
+Install kubectl
+
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    sudo mv kubectl /usr/local/bin/
+
+Verify:
+
+    kubectl version --client
+
+Step 5: Install eksctl
+
+    curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+    sudo mv /tmp/eksctl /usr/local/bin
+
+Verify:
+
+    eksctl version
+
+install Docker
+Docker is not mandatory to create an EKS cluster, but it's useful later for building container images.
+
+    docker --version
+
+Create the EKS Cluster
+
+    eksctl create cluster \
+      --name helm-cluster \
+      --region us-east-1 \
+      --nodes 2 \       # worker nodes
+      --node-type t3.medium
+
+This process takes about 15 to 20 minutes.
+
+Verify the Cluster
+    kubectl get nodes
+    kubectl get pods -A
+
+
