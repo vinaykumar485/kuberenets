@@ -11,7 +11,7 @@ spec:
     -  containerPort: 80
     volumeMounts:
     - name: empty-directory-volume
-      mountPath: /data
+      mountPath: /data    #path inside the pod
   volumes:
   - name: empty-directory-volume
     emptyDir: {}
