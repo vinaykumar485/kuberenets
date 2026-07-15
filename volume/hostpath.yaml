@@ -10,10 +10,10 @@ spec:
       image: nginx
       volumeMounts:
         - name: host-storage
-          mountPath: /data
+          mountPath: /data    #path inside the pod
 
   volumes:
     - name: host-storage
       hostPath:
-        path: /home/ubuntu/data
+        path: /home/ubuntu/data    #path inside the vm/node
         type: DirectoryOrCreate
