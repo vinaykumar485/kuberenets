@@ -1,0 +1,184 @@
+Why do we need volumes in Kubernetes?
+
+ Pods are ephemeral. If a Pod is deleted or recreated, data stored inside the Pod is lost. Volumes provide storage that applications can use to preserve or share data.
+
+WWhich applications require persistent storage?
+
+Examples:
+
+MySQL
+PostgreSQL
+MongoDB
+Elasticsearch
+Jenkins
+Prometheus
+Grafana (for dashboards if configured to persist)
+Applications that store user-uploaded files
+
+Types of Kubernetes Volumes
+
+├── emptyDir/simple mount
+├── hostPath
+├── ConfigMap
+├── Secret
+├── Persistent Volume (PV)
+├── Persistent Volume Claim (PVC)
+├── StorageClass
+├── AWS EBS
+├── AWS EFS
+├── Azure Disk
+├── GCE Persistent Disk
+└── NFS
+
+1.Empty Dir:
+
+this is depandent on pod lifecycle, that is when pod is created ,volume gets created and when you delet the pod the volume and the content inside it aslo get deleted , 
+
+syntex :
+create the pod with volume and voulume mount 
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: empty-directory
+  namespace: default
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: empty-directory-volume
+          mountPath: /data
+
+  volumes:
+    - name: empty-directory-volume
+      emptyDir: {}
+
+run command ;
+
+kubectl apply -f <file name>   # it will cret the pod
+kubectl exec -it <pod name> -- sh  # enter into the pod and go inside the path "/data" and crete some file (test.txt)  and list the file, it exists ,
+
+
+now run:
+kubectl delete pod <pod name>   # it will delete the pod
+lubectl exec -it <pod name> -- sh #now check the path /data, now list the file (test.txt)  which is ceted before the deletion of the pod, the file will not be present, 
+
+
+so it is clear that the data is lost when ever the pod is deleted .
+
+
+that is how the emptdir works 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+
+2. hostPath:
+
+
+As the name indicates this is the bridge/Path between emptyDir and Persistent Volumes (PV)
+
+hostpath vloume it wont create any vloume, just mounts dirctiry or file from kuberentes node to the pod 
+
+
+Architecture
+
++------------------------------------+
+| Kubernetes Node (Worker Node)      |
+|                                    |
+| /home/ubuntu/data                  |
+|        │                           |
+|        │ hostPath                  |
+|        ▼                           |
+| +------------------------------+   |
+| |           Pod                |   |
+| |                              |   |
+| |  Container                   |   |
+| |      │                       |   |
+| |      ▼                       |   |
+| |    /data                     |   |
+| +------------------------------+   |
++------------------------------------+
+
+example :
+
+Create the directory on your worker node
+
+	sudo mkdir -p /home/ubuntu/folder/test.txt
+
+
+then , create the pod inside the worker node 
+
+apiVersion: v1
+kind: Pod
+metadata: 
+    name: hostpath-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+      containerPort: 80
+    vloumeMount:
+       name: hostpath-volume
+       path: /data        #path inside the pod
+volume:
+  name: hostpath-volume
+  hostPath: home/ubuntu/folder       #PATH OF THE FOLDER IN YOUR WORKER/UBUNTU mchine
+  type: DirectoryOrCreate     #use the dirctory if present if not cret it 
+
+then , run
+
+	kubectl apply -f <file name> 
+	kubectl get pod
+	kubectl exec -it <pod name> -- sh
+ 
+	now go inside the path /data you are able to see the folder and the file which is creted in you ubuntu mahine/worker node that is /home/ubuntu/folder/test.txt
+
+
+
+
+this is one part and now, inside the pod create another file named as file.txt in the same path and comeout wiwth exit, and in the path of ubuntu mahine ubuntu/home/folder/  you can see test.txt and also file.txt , both the files are presnet , 
+
+this proves that both pod and vm are sharing the data between them.
+
+
+Now delete the pod which is created , 
+
+
+still you can see the both the files that is test.txt and file.txt in /home/ubuntu/ path 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
