@@ -150,30 +150,104 @@ this proves that both pod and vm are sharing the data between them.
 Now delete the pod which is created , 
 
 
-still you can see the both the files that is test.txt and file.txt in /home/ubuntu/ path 
+still you can see the both the files that is test.txt and file.txt in /home/ubuntu/ path
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+PERSISTENT VOLUME ( pv ):
+-----------------
+	it is an cluster level storage resource which is managed by kubernetes. 
+
+
+SUPPOSE , YOU HAVE POD AND APPLICATION Runnning in it , and this application requires a storage of 10gb , where should thos storage come from, we have to provide it from outside of the POD ,Insted of providing it inside the pod as like hostpath and emptydir . Which lets you to crete the PV inside  the kuberenets cluster.
 
 
 
+   Features: 
+	unlike emptyDir and Hostpath it is independent of pod and pod liftcycle
+	it supports backup like EBS , EFS 	
+	it is REUSABE
+
+	+--------------------------+
+	| Persistent Volume (PV)   |
+	| Capacity : 10Gi          |
+	| Access : RWO             |
+	+--------------------------+
+
+          (Not used yet by any pod)
 
 
+note: POD can not directly contcat PV , it can contact PV onl through PVC.
 
 
+Architecture
+------------                
+
+		Kubernetes Cluster
+
+        +---------------------------+
+        |   Persistent Volume (PV)  |
+        |         5Gi Storage       |
+        +-------------+-------------+
+                      |
+                      | Claimed by PVC
+                      |
+        +-------------v-------------+
+        | PersistentVolumeClaim     |
+        |          (PVC)            |
+        +-------------+-------------+
+                      |
+                      |
+        +-------------v-------------+
+        |           Pod             |
+        |      Mounts the PVC       |
+        +---------------------------+
 
 
+that is 
+
+	Create your first Persistent Volume
+	write the yal file for pv.yml 
+	Apply the pv.yaml
+	Verify with: kubectl get pv
+		     kubectl describe pv <pv pod name>
+
+			in the describe section you can notic that, "status : available" that means it is not used by any of the pod.
+
+	Create a PVC
+	Understand how a PVC binds to a PV
+
+	Mount the PVC into a Pod
+
+	Verify data persistence
+_____________________________________________________________________________________________________________________________________________________________________________________________
 
 
+PERSISTENT VOLUME CLAIM: ( PVC )
+
+	in simple words, it is an "REQUEST FOR THE STORAGE"
+
+	PV = The storage = (house)
+	PVC = The request to use the storage = (rental agreement)
+	Pod = The application that uses the storage = (tenant)
+
+steps:
+create the pvc.yaml file 
+kubectl apply -f pvc.yaml
+kubectl describe pvc < pod name of pvc >
+
+in the describe section  you can see
+	 status: "bounded "  when the pv size and PVC cliam size matches in both pv.yaml and pvc.yaml 
+	 status: "pending " when the pvcClaim size  is more than the pv size in yaml files.
 
 
+note: when the pvcclaim  size equal or less than the pv size , kuberentes will autometically binds this pvc to pv in the backend.
 
 
+that is, when PV is creted inside the cluster, there is "persistenetVolume controler" which continiously watch the cluster and when it is creted it store the data in "etcd" (which is part of k8s architecture component and it will take continously backup of each and every action inside the cluster) and also when PVC is created persistenetVolume controler monitor the cluster and store the PVC data in etcd againg , 
 
+so , when pvc is ceated, it checks the data pf PV for maching size which is mentiond in PVC and PV  , once it finds the matching size, it autometically binds both PV and PVC.
 
-
-
-
-
-
-
+___________________________________________________________________________________________________________________________________________________________________________________________________
 
 
 
