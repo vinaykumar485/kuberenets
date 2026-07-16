@@ -231,9 +231,9 @@ PERSISTENT VOLUME CLAIM: ( PVC )
 	Pod = The application that uses the storage = (tenant)
 
 steps:
-create the pvc.yaml file 
-kubectl apply -f pvc.yaml
-kubectl describe pvc < pod name of pvc >
+	create the pvc.yaml file 
+	kubectl apply -f pvc.yaml
+	kubectl describe pvc < pod name of pvc >
 
 in the describe section  you can see
 	 status: "bounded "  when the pv size and PVC cliam size matches in both pv.yaml and pvc.yaml 
@@ -249,10 +249,35 @@ so , when pvc is ceated, it checks the data pf PV for maching size which is ment
 
 ___________________________________________________________________________________________________________________________________________________________________________________________________
 
+att
+
+attching PVC to POD
+
+here we are going to write the yaml file for the pod in which we are going to mention the persitenetVolumeClime name which is already creted and bounded to persistentVolume, and the path inside the pod where the voulme to be mounted and the appliactioin will look for the storage at thet path .
+
+ 
+	complete  Architecture
+
+
+                 Worker Node
+
+               /mnt/data
+                   ▲
+                   │
+           Persistent Volume (PV)
+                   ▲
+                   │
+              PersistentVolumeClaim
+                   ▲
+                   │
+                  Pod
+                   │
+                   ▼
+                 /data
+                   │
+                   ▼
+             Application
 
 
 
-
-
-
-
+NOTE: THE VOLUME ONCE CREATED WILL NOT BE DELETED, EVEN THE POD GETS DELETD AND PVC GETS DELTED ALSO. THE DATA WILL STILL REAMINS.
