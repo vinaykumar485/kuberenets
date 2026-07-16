@@ -153,6 +153,12 @@ Now delete the pod which is created ,
 still you can see the both the files that is test.txt and file.txt in /home/ubuntu/ path
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
+STATIC PROVISIONING:
+-------------------
+
+	Generally creating PV, PVC amd mounting it to POD is a "STATIC PROVISIONING"
+                                                         ---------------------
+
 PERSISTENT VOLUME ( pv ):
 -----------------
 	it is an cluster level storage resource which is managed by kubernetes. 
@@ -266,7 +272,7 @@ here we are going to write the yaml file for the pod in which we are going to me
                    │
            Persistent Volume (PV)
                    ▲
-                   │
+                   │et
               PersistentVolumeClaim
                    ▲
                    │
@@ -281,3 +287,97 @@ here we are going to write the yaml file for the pod in which we are going to me
 
 
 NOTE: THE VOLUME ONCE CREATED WILL NOT BE DELETED, EVEN THE POD GETS DELETD AND PVC GETS DELTED ALSO. THE DATA WILL STILL REAMINS.
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+DYNAMIC PROVISIONING:
+
+	Generally here admin will not be creating the PV , insted the developer will create the PVC and this PVC will be approching the STORAGE CLASS for the required amount o vloume and storage class will crete the PV autometically and that will bound to PVC and that PVC will be mounted to the POD.
+
+
+Eg: suppose there are 500 developer and each one need volume, and admin can not cret the PV for each induiadule each time as we did in "ststic provisioning" , insted we use "storage class" for it .
+
+STORAGE CLASS: IT IS TEMPLATE WHICH WILL TELL THE KUBERNETES TO  CREAT THE STORAGE AUTOMETICALLY ,WHNE EVER THE DEVELOPER REQUET FOR STORAE
+
+
+
+
+
+     Customer
+
+	↓
+
+Books room online
+
+	↓
+
+Hotel automatically assigns room
+
+	↓
+
+Customer checks in
+
+Here, No manager involved.
+
+That's exactly what StorageClass does.
+
+
+
+A StorageClass is not storage.
+
+It is a blueprint (template) that tells Kubernetes how to create storage.
+
+Think:
+
+	StorageClass
+
+		↓
+
+	"If someone asks for 10Gi, create an Amazon EBS volume."
+
+
+
+architecture:
+------------
+Complete Production Flow (EKS)
+
+
+    Developer
+        |
+Creates PVC
+        │
+        ▼
+StorageClass (gp3)
+        │
+        ▼
+EBS CSI Driver
+        │
+        ▼
+AWS API
+        │
+        ▼
+Creates EBS Volume
+        │
+        ▼
+Kubernetes creates PV
+        │
+        ▼
+PVC Bound
+        │
+        ▼
+Pod starts
+
+
+
+
+Notice:The administrator never creates a PV.
+
+
+
+
+
