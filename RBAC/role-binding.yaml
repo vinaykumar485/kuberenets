@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rbac-role-binding
+  namespace: service-account
+
+subjects:   #tells about who is going to get the permission/role  like user, group, serviceaccount
+  - kind: ServiceAccount
+    name: rbac-service-account
+    namespace: service-account
+
+roleRef:    #refferes which role need to attached 
+  kind: Role
+  name: rbac-role
+  apiGroup: rbac.authorization.k8s.io

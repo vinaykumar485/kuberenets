@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rbac-role
+  namespace: service-account
+rules:
+  - apiGroups: [ "" ]   #for deployment it is [ "apps" ] and for ingress [ "networking.k8s.io" ] , same way [ "" ] reffers to core k8s resource like pod, service, configmap, like that.
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]  #it tell abbout the action to be performed as like create, update, patch, delete, get, list ...
