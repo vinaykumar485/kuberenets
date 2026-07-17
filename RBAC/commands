@@ -29,6 +29,27 @@ create role binding:
 
 	kubectl get rolebinding -n <name space name> 
 
+create clusterRole:
+
+	write clusterrole.yaml
+
+	kubectl apply -f cluaterrole.yaml
+
+	kubectl get clusterole | grep <cluaterrole name>
+
+	kubectl describe clusterole <clusterrole name>
+
+create Clusterrolebinding:
+
+	write clusterrolebinding.yaml
+
+	kubectl apply -f clusterolebinding.yaml
+
+	kubectl get clusterolebinding | grep <cluterrolebinding namae>
+
+	kubectl describe clusterrolebinging <cluaterrolebinding name>
+
+
 
 
 verify the things , that is in above we have ceted a service account and attcged the role by using rolebinding , this can be done by using bellow command 
@@ -70,8 +91,10 @@ Expected output:
 	no
 
 This demonstrates that RBAC is enforcing the permissions you defined.
-
+________________________________________________________________________________________________________________________________________________________________________
 What you'll learn from these steps
+
+
 Developer
      │
      ▼
