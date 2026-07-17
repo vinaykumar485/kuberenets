@@ -344,39 +344,118 @@ Think:
 
 architecture:
 ------------
-Complete Production Flow (EKS)
 
 
-    Developer
-        |
-Creates PVC
+Cmplete Production Flow (EKS)
+
+
+
+
+                    Developer
+                        │
+                        ▼
+              kubectl apply pvc.yaml
+                        │
+                        ▼
+                 API Server
+                        │
+                Stores PVC in etcd
+                        │
+                        ▼
+        PersistentVolume Controller
+       (Already running in Kubernetes)
+                        │
+                        ▼
+        Reads StorageClass (ebs-sc)
+                        │
+                        ▼
+        provisioner = ebs.csi.aws.com
+                        │
+                        ▼
+          Calls EBS CSI Controller
+                        │
+                        ▼
+             AWS EC2 CreateVolume()
+                        │
+                        ▼
+          AWS creates EBS Volume
+                        │
+                        ▼
+ AWS returns Volume ID (vol-xxxxxxxx)
+                        │
+                        ▼
+      CSI Driver returns Volume ID
+        to Kubernetes
+                        │
+                        ▼
+     Kubernetes creates PV object
+                        │
+                        ▼
+             PV binds to PVC
+                        │
+                        ▼
+      Pod is scheduled to a Worker Node
+                        │
+                        ▼
+        EBS CSI Node Plugin
+                        │
+                        ▼
+      Attach EBS to EC2 Instance
+                        │
+                        ▼
+      Mount volume into Pod (/data)
+                        │
+                        ▼
+      Application reads/writes data
+
+
+
+
+------------------------------
+What is the CSI Driver?
+_______________________
+
+CSI stands for:
+
+	Container Storage Interface
+
+
+Think of it as a translator.
+
+Kubernetes doesn't know how to create an Amazon EBS volume.
+
+Kubernetes only knows:
+
+	"I need a 10Gi disk."
+
+The CSI Driver translates that request into AWS API calls.
+
+Example:
+
+Kubernetes says:
+
+"I need 10Gi"
+
         │
         ▼
-StorageClass (gp3)
+
+EBS CSI Driver translates
+
         │
         ▼
-EBS CSI Driver
-        │
-        ▼
+
 AWS API
+
+CreateVolume(Size=10Gi, Type=gp3)
+
         │
         ▼
-Creates EBS Volume
-        │
-        ▼
-Kubernetes creates PV
-        │
-        ▼
-PVC Bound
-        │
-        ▼
-Pod starts
+
+AWS creates the EBS volume
 
 
 
-
-Notice:The administrator never creates a PV.
-
+So the CSI Driver is the bridge between Kubernetes and AWS
 
 
 
