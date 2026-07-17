@@ -1,0 +1,109 @@
+create name space
+
+	kubectl ceeate namespace < name >
+
+	kubectl get ns
+
+create the servie account:
+
+
+	write serviceaccount.yaml
+
+	kubectl apply -f <service account name.yaml>
+
+	kubectl get sa -n <namespace name>
+
+create role
+
+	write role.yaaml
+
+	kubectl apply -f role.yaml
+
+	kubeectl get role -n < name space >
+
+create role binding:
+
+	write rolebinding.yaml
+
+	kubectl apply -f <rolebinding.yaml>
+
+	kubectl get rolebinding -n <name space name> 
+
+
+
+verify the things , that is in above we have ceted a service account and attcged the role by using rolebinding , this can be done by using bellow command 
+
+
+
+	"kubectl auth can-i"
+
+
+
+
+
+Example 1:
+_________
+
+Chec whether the ServiceAccount can list Pods:
+
+kubectl auth can-i list pods \
+  --as=system:serviceaccount:dev:dev-user \
+  -n dev
+
+Expected output:
+
+	yes
+
+
+
+Example 2 :
+___________
+
+Now test whether it can delete Pods:
+
+kubectl auth can-i delete pods \
+  --as=system:serviceaccount:dev:dev-user \
+  -n dev
+
+Expected output:
+
+	no
+
+This demonstrates that RBAC is enforcing the permissions you defined.
+
+What you'll learn from these steps
+Developer
+     │
+     ▼
+Create Namespace
+
+     │
+     ▼
+Create ServiceAccount
+        │
+        ▼
+   (Identity)
+
+     │
+     ▼
+Create Role
+        │
+        ▼
+ (Permissions)
+
+     │
+     ▼
+Create RoleBinding
+        │
+        ▼
+Connect Identity + Permissions
+
+     │
+     ▼
+Verify using:
+
+kubectl auth can-i
+
+This completes the namespace-scoped RBAC workflow.
+
+_______________________________________________________________________________________________________________________________________________________________________________________________
