@@ -1,0 +1,128 @@
+RBAC (Role-Based Access Control)
+
+Topic's learn:
+
+ServiceAccount
+Role
+ClusterRole
+RoleBinding
+ClusterRoleBinding
+Authentication vs Authorization
+________________________________________________________________________________________________________________
+
+RBAC is Kubernetes' authorization system. " It is an kubernetes resource which will be responcibl for managig the autorization and autentication and decides who are havibg the ccess to cluster and what are the permission they are allowd to do"
+
+
+For example:
+
+	Can Vinay create Pods?
+	Can Jenkins deploy applications?
+	Can Prometheus read metrics?
+	Can a developer delete Namespaces?
+
+		RBAC decides who can do what.
+
+Authentication vs Authorization
+
+This is one of the most common interview questions.
+
+Authentication
+_______________________
+Authentication answers:
+
+Who are you?
+
+Examples:
+
+IAM User
+IAM Role
+ServiceAccount
+Certificate
+OIDC
+Authorization
+
+Authorization answers:
+_____________________
+What are you allowed to do?
+
+Examples:
+
+Can create Pods?
+Can list Deployments?
+Can delete Secrets?
+
+
+
+	"RBAC handles authorization".
+--------------------------------------
+
+RBAC Components
+______________________
+
+	There are five main objects.
+
+ServiceAccount / User
+        │
+        ▼
+      Role
+        │
+        ▼
+   RoleBinding
+
+or
+
+ServiceAccount / User
+        │
+        ▼
+   ClusterRole
+        │
+        ▼
+ClusterRoleBinding
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________
+
+Service account: it is identity used by the pod to authenticate with the kubernetes api server
+
+	"ServiceAccount = Identity of a Pod."
+
+
+ROLE: it defains the set of permission for the resource in an single namepsce 
+
+	"Role = What actions are allowed in one namespace".
+Example:
+
+In the single/dev namespace:
+
+	 Get Pods
+	ist Pods
+	Delete Pods
+
+ROLE BINDING: This grants a permission which are mentioned in role  to the service account/user/group
+
+	"ROLEBINDING = CONNECTING SERVICE ACCOUNT WITH ROLE"
+
+CLUSTER ROLE: This will define the set of role that are applicable accross the cluster 
+
+	"ClusterRole = Role for the entire cluster".
+Example:
+
+in entair cluster it Can:
+
+	View Nodes
+	View Namespaces
+	View PersistentVolumes
+
+These are cluster-scoped resources.
+
+
+CLUSTER ROLE BINDING": This will grant set of permission which are defined in cluster role  to the user /group/service account accross the cluster
+	
+
+"clusterRoleBinding" = connecting cluster rol with service account/pod/user/gropu for entair cluster access"
+	
+________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
