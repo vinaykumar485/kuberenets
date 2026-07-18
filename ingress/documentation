@@ -67,3 +67,113 @@ _________________________
 # when user hit the load balancer of nginx service hich is generated in "part 1" this will rout the request to the service which is deployed in part 2, and the servoiv ewill rout the request to the specific pod based up on th ematch label mentiined in deployment.yaml file
 
 # one more thinsg, nginx controler will read only the ingres wich is creted and not all the yaml files
+
+
+ingress workflow  is shown in graph format
+                                   PART 1
+                                   ------
+
+                     Install NGINX through Helm
+                              │
+                              ▼
+          ┌─────────────────────────────────────────────┐
+          │ Creates:                                    │
+          │                                             │
+          │ • Deployment                               │
+          │ • Pod (NGINX Controller)                   │
+          │ • Service (LoadBalancer)                   │
+          └─────────────────────────────────────────────┘
+                              │
+                              ▼
+                 Access Load Balancer DNS
+                              │
+                              ▼
+                       404 Not Found
+          (Because no Ingress rules are created yet)
+
+
+
+                                   PART 2
+                                   ------
+
+            Write application YAML files
+                     │
+        ┌────────────┼─────────────┐
+        ▼            ▼             ▼
+ Deployment.yaml  Service.yaml   Ingress.yaml
+                    (ClusterIP)   (Rules/Path)
+        │            │             │
+        └────────────┼─────────────┘
+                     ▼
+      kubectl apply -f deployment.yaml
+      kubectl apply -f service.yaml
+      kubectl apply -f ingress.yaml
+                     │
+                     ▼
+               Kubernetes API Server
+                     │
+                     ▼
+                    etcd
+                     │
+                     ▼
+     Watch API sends notification to
+     NGINX Controller Pod (created in Part 1)
+                     │
+                     ▼
+      Controller updates its details with
+      new Ingress rules (new domain and path)
+
+
+
+                                   PART 3
+                                   ------
+
+               User hits NGINX Load Balancer
+                         │
+                         ▼
+          NGINX Service (LoadBalancer)
+                         │
+                         ▼
+             NGINX Controller Pod
+                         │
+                         ▼
+            Reads only the Ingress resource
+         (Not Deployment.yaml or Service.yaml)
+                         │
+                         ▼
+      Reads the path/domain rules from Ingress
+                         │
+                         ▼
+      Routes request to the Service created
+                 in Part 2 (ClusterIP)
+                         │
+                         ▼
+      Service routes request to the specific
+      Pod based upon the match label mentioned
+           in deployment.yaml file
+                         │
+                         ▼
+                   Application Opens
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
