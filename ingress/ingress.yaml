@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  name: my-nginx-ingress
+
+spec:
+
+  ingressClassName: nginx  #there are two type of class nginx/alb loadbalancer , nginx controler firts look for this class, 
+
+  rules:      #nginx next read this part, it is just a routing information
+
+  - http:
+
+      paths:
+
+      - path: /   #Whenever a request comes with /, this rule matches.
+
+        pathType: Prefix
+
+        backend:
+
+          service:
+
+            name: my-nginx-service  #The controller asks Kubernetes that "Is there a Service named my-nginx-service?" Kubernetes says; "Yes."Then the controller go to that  the Service.
+            
+            port:
+
+              number: 80
+
+
+
+
+
+              #nginx ingress controler then goes to service.yaml and then with the help of match lablels  it will serch for the pod and the it rout the request to that pod
+
+
+#workflow of ingrees
+
+# part 1: install nginx throuh helm, so you willhave some files like depluyment and its pod, and service with load balancer ( when you acces this load balancer you will get 404 error now ) and also pod of nginx contriler
+
+# part 2: write file of you apliction like deployment, ingress with roles, service with clusterip and path init
+
+# kubectpl apply -f ingress.yaml , deplymnt.yaml,service,yaml
+
+# all these details will stored in api server and etcd
+
+# here in api server there is an watch api  whic will send notifiaction to nginx controler pod ( which is creted in part one step) and this controler will updates it details with new ingress rules ( new dmain and path)
+
+# part 3:
+
+# when user hit the load balancer of nginx service hich is generated in "part 1" this will rout the request to the service which is deployed in part 2, and the servoiv ewill rout the request to the specific pod based up on th ematch label mentiined in deployment.yaml file
+
+# one more thinsg, nginx controler will read only the ingres wich is creted and not all the yaml files

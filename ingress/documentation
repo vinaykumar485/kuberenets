@@ -1,0 +1,69 @@
+Ingress-Architecture 
+___________________________________________
+
+Developer
+      │
+kubectl apply -f ingress.yaml
+      │
+      ▼
+API Server
+      │
+      ▼
+etcd
+      │
+      ▼
+Ingress Object Stored in ETCD
+      │
+      ▼
+Ingress Controller
+(it uses WATCH API which will continously watch for new ingress configuration and notifies the ingress controler ) 
+      │
+      ▼
+
+ingress controle gets information about the new/updated rules of ingress configuation
+      |
+ingress contriler Reads the rules and calls AWS API to connfigure/update the LB
+      │
+      ▼
+based on rules it will Configures/update the  Load Balancer / NGINX in AWS
+      │
+      ▼
+Traffic starts flowing to that load balancer 
+
+________________________________________________________________________________________________________________________
+
+What happens if you create an Ingress without an Ingress Controller?
+
+Answer: The Ingress object is created and stored in the cluster, but nothing routes traffic because there is no controller to process the Ingress rules.
+
+
+Is an Ingress Controller part of Kubernetes by default?
+
+Answer: No. Kubernetes provides the Ingress resource, but you must install an Ingress Controller (such as NGINX Ingress Controller or AWS Load Balancer Controller) to implement the routing rules.
+
+______________________________________________________________________________________________________________________________________________________________________________________________________
+#work flow of ingree 
+_________________________
+
+# part 1: install nginx throuh helm, so you willhave some files like depluyment and its pod, and service with load balancer ( when you acces this load balancer you will get 404 error now ) and also pod of nginx contriler
+
+
+
+# part 2: write file of you apliction like deployment, ingress with roles, service with clusterip and path init
+
+# kubectpl apply -f ingress.yaml , deplymnt.yaml,service,yaml
+
+# all these details will stored in api server and etcd
+
+# here in api server there is an watch api  whic will send notifiaction to nginx controler pod ( which is creted in part one step) and this controler will updates it details with new ingress rules ( new dmain and path)
+
+
+
+
+
+
+# part 3:
+
+# when user hit the load balancer of nginx service hich is generated in "part 1" this will rout the request to the service which is deployed in part 2, and the servoiv ewill rout the request to the specific pod based up on th ematch label mentiined in deployment.yaml file
+
+# one more thinsg, nginx controler will read only the ingres wich is creted and not all the yaml files
