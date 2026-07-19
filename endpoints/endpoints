@@ -1,0 +1,231 @@
+what is endpoints: 
+	this is simply actuall ip address  an port number of every pod behind the service
+	
+			( or )
+	endpoints is the destination, where the request reaches 
+
+		 	( or ) 
+	
+	thisnk of like this , it is simple address that tells request to where to go .
+	
+
+
+	Each Pod has its own IP address.
+
+	Those Pod IPs are the actual places where requests are delivered.
+
+	In Kubernetes, the Endpoint object stores these Pod IP addresses (and ports) for a Service.
+
+
+
+
+Think of it like this:
+
+Service says:
+
+	"I know my name is frontend-service.
+	But I don't know where my Pods are."
+
+	↓
+
+Kubernetes creates an Endpoint.
+
+	Endpoint says:
+
+	Pod 1 → 10.244.1.5:80
+	Pod 2 → 10.244.2.8:80
+	Pod 3 → 10.244.3.9:80
+
+The Service reads the Endpoint and forwards traffic.
+
+
+For example:
+
+	A website URL can be an endpoint.
+	An API URL can be an endpoint.
+	A Pod IP can be an endpoint.
+	A database IP and port can be an endpoint.
+
+
+--------------------------------------------------------------------------------------------------------
+
+
+work flow :
+
+part 1 : developer - eployment.yaml -apply- api server- etcd store the deployment details - replica ontolr notice the deployment - crcets the re[plica - pod get genaed - ip assigend to pod - detaisl go to api server- etcd store the infoention
+
+
+part 2 : develpoore - service.yaml - apply - crete the servoce - and it s fuctoin is to rout eth e request to the pod with proper match labels - detsisl stoed in etcd  
+
+
+part 3 : end point controler will continously watch the api server for any chnages in pod like any uodate if any chnages i will upadte the same thing in rndpount ibject , alomg ith this kube-procy also whatcht e api server for any chnages , ehen there is chned in pod ip adess and detaay;s it also updates the trfaic informtion  to route reqyest to new ip 
+
+
+part 4 : user - reqyet -load balnec/ipades:port / service - clusteip/endpoint - endpoint obkect - kueproxy - pod - app -web -ui
+
+
+
+that is : as below :
+
+PART 1:
+---------------------------------------
+Developer
+
+↓
+
+deployment.yaml
+
+↓
+
+kubectl apply
+
+↓
+
+API Server
+
+↓
+
+etcd stores Deployment
+
+↓
+
+Deployment Controller notices Deployment
+
+↓
+
+Creates ReplicaSet
+
+↓
+
+ReplicaSet Controller notices ReplicaSet
+
+↓
+
+Creates Pod
+
+↓
+
+Scheduler assigns Pod to a Worker Node
+
+↓
+
+Kubelet starts the Pod
+
+↓
+
+Pod gets IP
+
+↓
+
+API Server updates Pod status
+
+↓
+
+etcd stores Pod information
+
+PART 2:
+-----------------------------------------
+Developer
+
+↓
+
+service.yaml
+
+↓
+
+kubectl apply
+
+↓
+
+API Server
+
+↓
+
+etcd stores Service
+
+↓
+
+Service gets a ClusterIP
+
+↓
+
+Service selector tells Kubernetes
+
+"I want Pods with label app=nginx."
+
+PART 3:
+________________________
+Pod changes
+
+↓
+
+API Server
+
+↓
+
+Endpoint Controller notices
+
+↓
+
+Updates Endpoint Object
+
+↓
+
+API Server stores updated Endpoint
+
+↓
+
+kube-proxy notices Endpoint change
+
+↓
+
+Updates its routing rules
+
+↓
+
+Future traffic goes to the new Pod
+
+PART 4 : 
+________________________________
+
+User
+
+↓
+
+Load Balancer
+
+↓
+
+Ingress Controller (if using Ingress)
+
+↓
+
+Service (ClusterIP)
+
+↓
+
+kube-proxy
+
+↓
+
+kube-proxy reads Endpoint Object
+
+↓
+
+Chooses Pod IP
+
+↓
+
+Pod
+
+↓
+
+Container
+
+↓
+
+Application
+
+↓
+
+Web UI
