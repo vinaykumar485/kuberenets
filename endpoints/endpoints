@@ -229,3 +229,86 @@ Application
 ↓
 
 Web UI
+
+
+
+
+
+____________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+WORK FLOW EXAMPLE IS BELOW AND IT IS HIITED IN "NOTICE"
+---------------------------------------------------------------------------------------------------------------
+POD DETAILS:
+
+ubuntu@ip-172-31-16-67:~/kuberenets/endpoints$ kubectl get pod -o wide
+
+NAME                        READY   STATUS    RESTARTS   AGE   IP              NODE                            NOMINATED NODE   READINESS GATES
+my-nginx-54dfd44445-2f4rb   1/1     Running   0          25h   192.168.14.18   ip-192-168-28-85.ec2.internal   <none>           <none>
+
+
+NOTICE POD IP : IT IS " 192.168.14.18" 
+
+SERVICE DETAILS:
+
+ubuntu@ip-172-31-16-67:~/kuberenets/endpoints$ kubectl get svc -o wide
+
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+my-nginx-service   ClusterIP   10.100.109.236   <none>        80/TCP    25h   app=my-nginx
+
+
+NOTICE SERIVE NAME AND CLUSTER IP AND SELECTOR " app=my-nginx "
+
+
+ENDPOINTS DETAILS:
+
+ubuntu@ip-172-31-16-67:~/kuberenets/endpoints$ kubectl get endpoints 
+NAME               ENDPOINTS                               AGE
+my-nginx-service   192.168.14.18:80                        25h
+
+NOTICE: end points = 192.168.14.18:80 SAME AS POD IP IN THE ABOVE
+
+
+
+DESCRIBE SERVICE:
+
+ubuntu@ip-172-31-16-67:~/kuberenets/endpoints$ kubectl describe svc my-nginx-service
+Name:                     my-nginx-service
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=my-nginx   # NOTICE THIS
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.100.109.236
+IPs:                      10.100.109.236
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+Endpoints:                192.168.14.18:80   #NOTICE THIS
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>
+
+
+DESCRIBE END POINT:
+
+
+ubuntu@ip-172-31-16-67:~/kuberenets/endpoints$ kubectl describe endpoints my-nginx-service
+
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+Name:         my-nginx-service       #NOTUCE THIS
+Namespace:    default
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-07-18T07:24:50Z
+Subsets:
+  Addresses:          192.168.14.18    #NOTICE THIS 
+  NotReadyAddresses:  <none>
+  Ports:
+    Name     Port  Protocol
+    ----     ----  --------
+    <unset>  80    TCP
+
+Events:  <none>
