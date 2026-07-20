@@ -5,7 +5,7 @@ pre-requesits:
     kubctl installed
     eksclt installed
     docker installed
- -----------------------------------------------------------------------------------------  
+ ----------------------------------------------------------------------------------------- -----------------------------------------------------------------------------------------   
 
 Update the VM
     sudo apt update && sudo apt upgrade -y
@@ -36,7 +36,7 @@ Configure AWS Credentials
 Verify:
 
     aws sts get-caller-identity
-
+ -----------------------------------------------------------------------------------------  ----------------------------------------------------------------------------------------- 
 Install kubectl
 
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -46,7 +46,7 @@ Install kubectl
 Verify:
 
     kubectl version --client
-
+ -----------------------------------------------------------------------------------------  ----------------------------------------------------------------------------------------- 
 Step 5: Install eksctl
 
     curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
@@ -55,7 +55,7 @@ Step 5: Install eksctl
 Verify:
 
     eksctl version
-
+ ----------------------------------------------------------------------------------------- -----------------------------------------------------------------------------------------  
 install Docker
 Docker is not mandatory to create an EKS cluster, but it's useful later for building container images.
 
