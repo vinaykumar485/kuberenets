@@ -75,4 +75,66 @@ Verify the Cluster
     kubectl get nodes
     kubectl get pods -A
 
+_______________________________________________________________________________________________________________________________________________________________________________________
 
+
+
+
+if allready you have the cluster and you want to connect t that cluster :
+
+Check kubectl path:
+
+	which kubectl
+
+Expected:
+
+/usr/local/bin/kubectl
+
+or
+
+/usr/bin/kubectl
+
+Check Kubernetes config
+	kubectl config view
+
+Check current context
+	kubectl config current-context
+
+List contexts
+	kubectl config get-contexts
+
+Check kubeconfig environment variable
+	echo $KUBECONFIG
+
+
+
+Check if kubeconfig exists
+
+Run:
+	ls -la ~/.kube
+
+Then:
+
+	cat ~/.kube/config
+
+If the file doesn't exist, that's okay—it means we need to create it.
+
+
+
+Check whether your EKS cluster still exists
+
+Run:
+
+	aws eks list-clusters --region us-east-1
+
+If the cluster exists
+
+We'll regenerate the kubeconfig:
+
+	aws eks update-kubeconfig \
+ 	 --region us-east-1 \
+  	 --name <your-cluster-name>
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
