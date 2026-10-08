@@ -34,18 +34,21 @@ ________________________________________________________________________________
 
 What happens if you create an Ingress without an Ingress Controller?
 
-Answer: The Ingress object is created and stored in the cluster, but nothing routes traffic because there is no controller to process the Ingress rules.
+Answer: The Ingress object is created and stored in the cluster, but nothing routes traffic because there is no controller 
+to process the Ingress rules.
 
 
 Is an Ingress Controller part of Kubernetes by default?
 
-Answer: No. Kubernetes provides the Ingress resource, but you must install an Ingress Controller (such as NGINX Ingress Controller or AWS Load Balancer Controller) to implement the routing rules.
+Answer: No. Kubernetes provides the Ingress resource, but you must install an Ingress Controller 
+(such as NGINX Ingress Controller or AWS Load Balancer Controller) to implement the routing rules.
 
 ______________________________________________________________________________________________________________________________________________________________________________________________________
 #work flow of ingree 
 _________________________
 
-# part 1: install nginx throuh helm, so you willhave some files like depluyment and its pod, and service with load balancer ( when you acces this load balancer you will get 404 error now ) and also pod of nginx contriler
+# part 1: install nginx throuh helm, so you willhave some files like depluyment and its pod, and service with load balancer 
+#( when you acces this load balancer you will get 404 error now ) and also pod of nginx contriler
 
 
 
@@ -55,7 +58,8 @@ _________________________
 
 # all these details will stored in api server and etcd
 
-# here in api server there is an watch api  whic will send notifiaction to nginx controler pod ( which is creted in part one step) and this controler will updates it details with new ingress rules ( new dmain and path)
+# here in api server there is an watch api  whic will send notifiaction to nginx controler pod ( which is creted in part one step) 
+#and this controler will updates it details with new ingress rules ( new dmain and path)
 
 
 
@@ -64,7 +68,9 @@ _________________________
 
 # part 3:
 
-# when user hit the load balancer of nginx service hich is generated in "part 1" this will rout the request to the service which is deployed in part 2, and the servoiv ewill rout the request to the specific pod based up on th ematch label mentiined in deployment.yaml file
+# when user hit the load balancer of nginx service hich is generated in "part 1" this will rout the request to 
+#the service which is deployed in part 2, and the servoiv ewill rout the request to the specific pod based up on th 
+#ematch label mentiined in deployment.yaml file
 
 # one more thinsg, nginx controler will read only the ingres wich is creted and not all the yaml files
 
