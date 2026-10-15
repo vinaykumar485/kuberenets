@@ -52,13 +52,17 @@ For example:
 
 work flow :
 
-part 1 : developer - eployment.yaml -apply- api server- etcd store the deployment details - replica ontolr notice the deployment - crcets the re[plica - pod get genaed - ip assigend to pod - detaisl go to api server- etcd store the infoention
+part 1 : developer - deployment.yaml -apply- api server- etcd store the deployment details - replica ontolr notice the deployment - 
+		 crcets the re[plica - pod get genaed - ip assigend to pod - detaisl go to api server- etcd store the infoention
 
 
-part 2 : develpoore - service.yaml - apply - crete the servoce - and it s fuctoin is to rout eth e request to the pod with proper match labels - detsisl stoed in etcd  
+part 2 : develpoore - service.yaml - apply - crete the servoce - and it s fuctoin is to rout eth e request to the pod with proper match labels - 
+		 detsisl stoed in etcd  
 
 
-part 3 : end point controler will continously watch the api server for any chnages in pod like any uodate if any chnages i will upadte the same thing in rndpount ibject , alomg ith this kube-procy also whatcht e api server for any chnages , ehen there is chned in pod ip adess and detaay;s it also updates the trfaic informtion  to route reqyest to new ip 
+part 3 : end point controler will continously watch the api server for any chnages in pod like any uodate if any chnages i will upadte 
+		 the same thing in rndpount ibject , alomg ith this kube-procy also whatcht e api server for any chnages , ehen there is 
+		 chned in pod ip adess and detaay;s it also updates the trfaic informtion  to route reqyest to new ip 
 
 
 part 4 : user - reqyet -load balnec/ipades:port / service - clusteip/endpoint - endpoint obkect - kueproxy - pod - app -web -ui
@@ -259,7 +263,7 @@ NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SE
 my-nginx-service   ClusterIP   10.100.109.236   <none>        80/TCP    25h   app=my-nginx
 
 
-NOTICE SERIVE NAME AND CLUSTER IP AND SELECTOR " app=my-nginx "
+NOTICE SERIVCE NAME AND CLUSTER IP AND SELECTOR " app=my-nginx "
 
 
 ENDPOINTS DETAILS:
