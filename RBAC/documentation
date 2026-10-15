@@ -10,7 +10,8 @@ ClusterRoleBinding
 Authentication vs Authorization
 ________________________________________________________________________________________________________________
 
-RBAC is Kubernetes' authorization system. " It is an kubernetes resource which will be responcibl for managig the autorization and autentication and decides who are havibg the ccess to cluster and what are the permission they are allowd to do"
+RBAC is Kubernetes' authorization system. " It is an kubernetes resource which will be responcibl for
+managig the autorization and autentication and decides who are havibg the ccess to cluster and what are the permission they are allowd to do"
 
 
 For example:
@@ -95,8 +96,8 @@ Example:
 In the single/dev namespace:
 
 	 Get Pods
-	ist Pods
-	Delete Pods
+     list Pods
+	 Delete Pods
 
 ROLE BINDING: This grants a permission which are mentioned in role  to the service account/user/group
 
